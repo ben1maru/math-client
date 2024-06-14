@@ -1,0 +1,15 @@
+
+.rounded-circle {
+  width: 30px; /* задайте ширину фото */
+  height: 30px; /* задайте висоту фото */
+  border-radius: 50%; /* це зробить зображення круглим */
+  margin-top: 5px;
+}
+
+.navbar-nav{
+  display: flex;
+  align-items: center;
+}
+.navbar-brand{
+  padding-left: 15%;
+}

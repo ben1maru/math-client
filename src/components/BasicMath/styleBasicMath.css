@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+body{
+
+    background-color: #ebdcb2;
+}
+
+@media screen and (max-width: 768px){
+  iframe{
+    width: 100%;
+  }    
+}
+
+  /* Стилі для заголовків */
+  h2 {
+    text-align: center;
+  }
+  
+  /* Стилі для параграфів */
+  p {
+    text-align: justify; /* Вирівнювання по ширині */
+    margin-left: auto; /* Відступ зліва */
+    margin-right: auto; /* Відступ справа */
+    width: 80%; /* Ширина тексту */
+    font-size: 15px;
+    font-family:"Open Sans", sans-serif;
+  }
+  
+  /* Стилі для відео */
+  .example iframe {
+    display: block;
+    margin-left: auto; /* Відступ зліва */
+    margin-right: auto; /* Відступ справа */
+  }
+  

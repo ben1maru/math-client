@@ -1,0 +1,123 @@
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 100px;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+    overflow-y: auto;
+}
+
+.question {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    font-size: 20px;
+    justify-content: center;
+}
+
+.question.correct {
+    background-color: #c8e6c9;
+}
+
+.question.incorrect {
+    background-color: #ffcdd2;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.question-text {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.description {
+    margin-top: 20px;
+    font-style: italic;
+    color: #888;
+}
+/* Стилізація радіо-кнопок */
+.radio-container {
+    display: inline-block;
+    margin-right: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    width: 200px; /* Ширина радіо-кнопки */
+    height: 100px; /* Висота радіо-кнопки */
+}
+
+.radio-container input[type="radio"] {
+    display: none;
+}
+
+.radio-container label {
+    display: block;
+    padding: 20px 90px;
+    cursor: pointer;
+    color: white; /* Колір тексту білий */
+}
+
+/* Кольори для радіо-кнопок */
+.radio-container:nth-child(1) label {
+    background-color: red;
+}
+
+.radio-container:nth-child(2) label {
+    background-color: blue;
+}
+
+.radio-container:nth-child(3) label {
+    background-color: violet;
+}
+
+.radio-container:nth-child(4) label {
+    background-color: green;
+}
+
+/* Стилі для вибраної радіо-кнопки */
+.radio-container.selected label {
+    transform: scale(1.1); /* Збільшуємо розмір обраної кнопки */
+}
+
+.radio-container.selected label:hover {
+    transform: scale(1.1); /* Збільшуємо розмір обраної кнопки при наведенні */
+}
+
+/* Стилізація кнопки "Next" */
+.next-button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #008CBA;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.next-button:hover {
+    background-color: #005f80;
+}

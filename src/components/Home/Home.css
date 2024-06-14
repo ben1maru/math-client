@@ -1,0 +1,34 @@
+.cont {
+    
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .scoreboard-section {
+    margin-top: 50px;
+  }
+  
+  .scoreboard-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .scoreboard-table th,
+  .scoreboard-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .scoreboard-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .scoreboard-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .scoreboard-table tbody tr:hover {
+    background-color: #ddd;
+  }
+  

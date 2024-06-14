@@ -1,0 +1,59 @@
+body {
+    display: flex;
+    flex-direction: column;
+    padding-top: 3%;
+    padding-left:13%;
+    padding-right:13%;
+  }
+  @media screen and (max-width: 768px){
+    body{
+        padding-top: 7%;
+        padding-left:2%;
+    padding-right:2%;
+    }    
+  }
+/* Рамка */
+.ramka {
+    border: 2px solid #2f4413;
+  
+    padding: 20px;
+    margin-bottom: 20px;
+}
+  
+/* Заголовок */
+.art {
+    margin-top: 0;
+}
+  
+/* Основний текст */
+.oms_definition {
+    margin-bottom: 15px;
+    padding: 15px; /* Додано внутрішній padding */
+    border: 3px solid #797100; /* Додано рамку */
+}
+  
+/* Зображення всередині тексту */
+.oms_image_in_text {
+    float: right; /* Зображення справа */
+    margin-left: 15px; /* Відступ між текстом і зображенням */
+}
+  
+/* Збереження вирівнювання зображення та тексту */
+.oms_definition::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+/* Заголовок */
+.title {
+    text-align: center;
+}
+li{
+    list-style: none;
+}
+p{
+    text-align: center;
+}
+img{
+    width: 48%;
+}
