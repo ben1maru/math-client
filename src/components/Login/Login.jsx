@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import './style.css';
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import "./style.css";
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -19,26 +19,28 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8081/api/auth/login', {
-        email: email,
-        password: password
-      });
+      const response = await axios.post(
+        "https://math-server-1vt9.onrender.com/api/auth/login",
+        {
+          email: email,
+          password: password,
+        }
+      );
 
       console.log(response.data.token);
-      localStorage.setItem('token', response.data.token)
-      setError('');
+      localStorage.setItem("token", response.data.token);
+      setError("");
       // Перенаправлення на головну сторінку після успішного входу
-      window.location.href = '/';
+      window.location.href = "/";
     } catch (error) {
-      console.error('Login failed:', error.response.data.message);
+      console.error("Login failed:", error.response.data.message);
       setError(error.response.data.message);
     }
   };
 
   return (
     <div className="login-container">
-      <h2>Авторизація
-      </h2>
+      <h2>Авторизація</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Електронна пошта:</label>
@@ -63,7 +65,9 @@ function Login() {
         {error && <p className="error">{error}</p>}
         <button type="submit">Увійти</button>
       </form>
-      <p>Немаєте акаунту? <Link to='/register'>Створити акаунт</Link></p>
+      <p>
+        Немаєте акаунту? <Link to="/register">Створити акаунт</Link>
+      </p>
     </div>
   );
 }

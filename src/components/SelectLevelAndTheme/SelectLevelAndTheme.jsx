@@ -13,11 +13,11 @@ function SelectLevelAndTheme() {
         if (!token) {
             window.location.href = "/login";
         } else {
-            fetch('http://localhost:8081/api/level/level')
+            fetch('https://math-server-1vt9.onrender.com/api/level/level')
                 .then(response => response.json())
                 .then(data => setLevels(data));
             
-            fetch('http://localhost:8081/api/theme/theme')
+            fetch('https://math-server-1vt9.onrender.com/api/theme/theme')
                 .then(response => response.json())
                 .then(data => setThemes(data));
         }
