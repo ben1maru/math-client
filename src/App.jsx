@@ -15,6 +15,7 @@ import SelectLevelAndTheme from "./components/SelectLevelAndTheme/SelectLevelAnd
 import EditQuiz from "./components/AdminPanel/EditQuiz/EditQuiz";
 import DevelopOfLogicThink from "./components/Dev_of_logic_think/Develop_of_logic_think";
 import AddQuiz from "./components/AdminPanel/AddQuiz/AddQuiz";
+import Profile from "./components/profile/Profile";
 function App() {
   return (
     <BrowserRouter>
@@ -34,7 +35,7 @@ function App() {
         <Route path="/dashboards" element={<Dashboard/>} />
         <Route path="/choiceExam" element={<SelectLevelAndTheme/>} />
         <Route path="/addQuiz" element={<AddQuiz/>} />
-        
+        <Route path="/profile" element={<Profile />}/>
       </Routes>
     </BrowserRouter>
   );
