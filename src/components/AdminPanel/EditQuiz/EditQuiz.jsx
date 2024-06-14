@@ -22,7 +22,7 @@ function EditQuiz() {
   }, [id]);
 
   const fetchQuestionData = () => {
-    axios.get(`http://localhost:8081/api/questions/questionsEdit/${id}`)
+    axios.get(`https://math-server-1vt9.onrender.com/api/questions/questionsEdit/${id}`)
       .then((response) => {
         const data = response.data[0];
         console.log("Fetched question data:", data);
@@ -37,7 +37,7 @@ function EditQuiz() {
   };
 
   const fetchLevels = () => {
-    axios.get("http://localhost:8081/api/level/level")
+    axios.get("https://math-server-1vt9.onrender.com/api/level/level")
       .then((response) => {
         const data = response.data;
         console.log("Levels fetched:", data);
@@ -47,7 +47,7 @@ function EditQuiz() {
   };
 
   const fetchThemes = () => {
-    axios.get("http://localhost:8081/api/theme/theme")
+    axios.get("https://math-server-1vt9.onrender.com/api/theme/theme")
       .then((response) => {
         const data = response.data;
         console.log("Themes fetched:", data);
@@ -107,7 +107,7 @@ function EditQuiz() {
     }));
   
     // Відправити дані на сервер
-    axios.post(`http://localhost:8081/api/questions/questionsUpdate/${id}`, questionData)
+    axios.post(`https://math-server-1vt9.onrender.com/api/questions/questionsUpdate/${id}`, questionData)
       .then((response) => {
         const data = response.data;
         console.log(questionData);

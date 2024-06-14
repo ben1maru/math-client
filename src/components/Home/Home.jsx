@@ -8,7 +8,7 @@ function Home() {
   const [scoreboard, setScoreboard] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8081/api/scoreboard/scoreboard')
+    fetch('https://math-server-1vt9.onrender.com/api/scoreboard/scoreboard')
       .then(response => response.json())
       .then(data => setScoreboard(data))
       .catch(error => console.error('Error fetching scoreboard data:', error));

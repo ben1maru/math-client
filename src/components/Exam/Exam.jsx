@@ -23,7 +23,7 @@ function Exam() {
     }
 
     fetch(
-      `http://localhost:8081/api/auth/user`,
+      `https://math-server-1vt9.onrender.com/api/auth/user`,
       {
         method: 'GET',
         headers: {
@@ -39,7 +39,7 @@ function Exam() {
     .catch((error) => console.error('Error fetching user data:', error));
 
     fetch(
-      `http://localhost:8081/api/questions/questions/${id_level}/${id_themes}`
+      `https://math-server-1vt9.onrender.com/api/questions/questions/${id_level}/${id_themes}`
     )
       .then((response) => response.json())
       .then((data) => setQuestions(data));
@@ -90,7 +90,7 @@ function Exam() {
       categoryId: Number(id_themes)
     };
 
-    fetch('http://localhost:8081/api/scoreboard/scoreboardPushData', {
+    fetch('https://math-server-1vt9.onrender.com/api/scoreboard/scoreboardPushData', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

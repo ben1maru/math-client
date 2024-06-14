@@ -13,13 +13,13 @@ function AddQuiz() {
 
   useEffect(() => {
     // Отримання списку рівнів
-    fetch('http://localhost:8081/api/level/level')
+    fetch('https://math-server-1vt9.onrender.com/api/level/level')
       .then(response => response.json())
       .then(data => setLevels(data))
       .catch(error => console.error('Error fetching levels:', error));
 
     // Отримання списку тем
-    fetch('http://localhost:8081/api/theme/theme')
+    fetch('https://math-server-1vt9.onrender.com/api/theme/theme')
       .then(response => response.json())
       .then(data => setThemes(data))
       .catch(error => console.error('Error fetching themes:', error));
@@ -39,7 +39,7 @@ function AddQuiz() {
     };
 
     // Відправлення даних на сервер
-    fetch('http://localhost:8081/api/questions/questionsPush', {
+    fetch('https://math-server-1vt9.onrender.com/api/questions/questionsPush', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -8,7 +8,7 @@ function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:8081/api/questions/questionsAdmin")
+    fetch("https://math-server-1vt9.onrender.com/api/questions/questionsAdmin")
       .then((response) => response.json())
       .then((data) => setQuestions(data))
       .catch((error) => console.error("Error fetching questions:", error));
@@ -22,7 +22,7 @@ function Dashboard() {
   const handleDelete = (id) => {
     console.log(`Delete question with ID: ${id}`);
 
-    fetch(`http://localhost:8081/api/questions/questionsDelete/${id}`, {
+    fetch(`https://math-server-1vt9.onrender.com/api/questions/questionsDelete/${id}`, {
       method: "DELETE",
     })
       .then((response) => {

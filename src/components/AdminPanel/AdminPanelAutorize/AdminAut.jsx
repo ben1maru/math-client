@@ -16,7 +16,7 @@ function AdminAuth() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8081/api/auth/loginAdmin', formData);
+      const response = await axios.post('https://math-server-1vt9.onrender.com/api/auth/loginAdmin', formData);
       const { isAdmin } = response.data;
 
       if (isAdmin) {
