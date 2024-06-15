@@ -24,6 +24,7 @@ const Register = () => {
     try {
       const response = await axios.post('https://math-server-8noz.onrender.com/api/auth/register', formData);
       console.log(response.data); // assuming response data contains useful info
+      window.location.href = "/login";
     } catch (error) {
       console.error('Registration failed:', error);
     }

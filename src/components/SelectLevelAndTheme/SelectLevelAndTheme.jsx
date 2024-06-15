@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NavBar from './components/NavBar/NavBar'
+import NavBar from "../NavBar/NavBar";
+import './style.css';
 
 function SelectLevelAndTheme() {
     const [levels, setLevels] = useState([]);

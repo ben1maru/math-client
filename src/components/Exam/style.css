@@ -21,11 +21,11 @@
 }
 
 .question.correct {
-    background-color: #c8e6c9;
+    background-color: #00b406;
 }
 
 .question.incorrect {
-    background-color: #ffcdd2;
+    background-color: #72000b;
 }
 
 .main-content {

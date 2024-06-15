@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios"; // Імпортуємо Axios
-import "./EditQuiz.css"; // Підключаємо файл зі стилями
+import axios from "axios";
+import "./EditQuiz.css";
 
 function EditQuiz() {
   const { id } = useParams();
@@ -13,8 +13,8 @@ function EditQuiz() {
     answer: ['', '', '', ''],
     correct_answer: '',
     description: '',
-    level_id: '',
-    category_id: ''
+    id_level: '',
+    id_theme: ''
   });
   const [message, setMessage] = useState('');
   const [isError, setIsError] = useState(false);
@@ -25,39 +25,41 @@ function EditQuiz() {
     fetchThemes();
   }, [id]);
 
-  const fetchQuestionData = () => {
-    axios.get(`https://math-server-8noz.onrender.com/api/questions/questionsEdit/${id}`)
-      .then((response) => {
-        const data = response.data;
-        setQuestionData({
-          question: data.question,
-          photo: data.photo,
-          answer: data.answer || ['', '', '', ''],
-          correct_answer: data.correct_answer,
-          description: data.description,
-          level_id: data.level_id,
-          category_id: data.category_id
-        });
-      })
-      .catch((error) => console.error("Error fetching question data:", error));
+  const fetchQuestionData = async () => {
+    try {
+      const response = await axios.get(`https://math-server-8noz.onrender.com/api/questions/questionsEdit/${id}`);
+      const data = response.data[0]; // Assuming response.data is an array with a single object
+      setQuestionData({
+        question: data.question || '',
+        photo: data.photo || '',
+        answer: data.answer || ['', '', '', ''], // Ensure answer is initialized as an array of strings
+        correct_answer: data.correct_answer || '',
+        description: data.description || '',
+        id_level: data.id_level || '',
+        id_theme: data.id_themes || ''
+      });
+      console.log("Fetched question data:", data); // Debugging log
+    } catch (error) {
+      console.error("Error fetching question data:", error);
+    }
   };
 
-  const fetchLevels = () => {
-    axios.get("https://math-server-8noz.onrender.com/api/level/level")
-      .then((response) => {
-        const data = response.data;
-        setLevels(data);
-      })
-      .catch((error) => console.error("Error fetching levels:", error));
+  const fetchLevels = async () => {
+    try {
+      const response = await axios.get("https://math-server-8noz.onrender.com/api/level/level");
+      setLevels(response.data);
+    } catch (error) {
+      console.error("Error fetching levels:", error);
+    }
   };
 
-  const fetchThemes = () => {
-    axios.get("https://math-server-8noz.onrender.com/api/theme/theme")
-      .then((response) => {
-        const data = response.data;
-        setThemes(data);
-      })
-      .catch((error) => console.error("Error fetching themes:", error));
+  const fetchThemes = async () => {
+    try {
+      const response = await axios.get("https://math-server-8noz.onrender.com/api/theme/theme");
+      setThemes(response.data);
+    } catch (error) {
+      console.error("Error fetching themes:", error);
+    }
   };
 
   const handleInputChange = (event) => {
@@ -77,20 +79,27 @@ function EditQuiz() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+      // Ensure none of the answers are null or undefined
+      const answersValid = questionData.answer.every(answer => answer !== null && answer !== undefined);
+      if (!answersValid) {
+        throw new Error("Answers cannot be null or undefined.");
+      }
 
-    axios.post(`https://math-server-8noz.onrender.com/api/questions/questionsUpdate/${id}`, questionData)
-      .then((response) => {
-        setMessage("Question updated successfully!");
-        setIsError(false);
-      })
-      .catch((error) => {
-        setMessage("Error updating question.");
-        setIsError(true);
-      });
+      // Perform the update request
+      await axios.post(`https://math-server-8noz.onrender.com/api/questions/questionsUpdate/${id}`, questionData);
+      setMessage("Питання оновлено!");
+      setIsError(false);
+    } catch (error) {
+      console.error("Error updating question:", error);
+      setMessage("Упс якась помилка!");
+      setIsError(true);
+    }
   };
 
+  // Only render the form if data has been fetched
   if (!questionData || levels.length === 0 || themes.length === 0) {
     return <div>Loading...</div>;
   }
@@ -158,8 +167,8 @@ function EditQuiz() {
         <div className="form-group">
           <label>Рівень:</label>
           <select
-            value={questionData.level_id}
-            name="level_id"
+            value={questionData.id_level}
+            name="id_level"
             onChange={handleInputChange}
           >
             {levels.map((level) => (
@@ -172,8 +181,8 @@ function EditQuiz() {
         <div className="form-group">
           <label>Тема:</label>
           <select
-            value={questionData.category_id}
-            name="category_id"
+            value={questionData.id_theme}
+            name="id_theme"
             onChange={handleInputChange}
           >
             {themes.map((theme) => (

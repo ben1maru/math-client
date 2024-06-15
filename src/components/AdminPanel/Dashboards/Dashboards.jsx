@@ -37,7 +37,7 @@ function Dashboard() {
       })
       .then((data) => {
         console.log("Question deleted successfully:", data);
-        setMessage('Question deleted successfully');
+        setMessage('Питання успішно видалено!');
         setIsError(false);
         // Оновити список питань, щоб відобразити зміни
         setQuestions((prevQuestions) =>
@@ -46,7 +46,7 @@ function Dashboard() {
       })
       .catch((error) => {
         console.error("Error deleting question:", error);
-        setMessage('Failed to delete question');
+        setMessage('Упс щось пішло не так');
         setIsError(true);
       });
   };

@@ -8,7 +8,7 @@ function Home() {
   const [scoreboard, setScoreboard] = useState([]);
 
   useEffect(() => {
-    fetch('https://math-server-1vt9.onrender.com/api/scoreboard/scoreboard')
+    fetch('https://math-server-8noz.onrender.com/api/scoreboard/scoreboard')
       .then(response => response.json())
       .then(data => setScoreboard(data))
       .catch(error => console.error('Error fetching scoreboard data:', error));
@@ -21,7 +21,7 @@ function Home() {
 
       <div className="cont">
         <header className="header">
-          <h1>Ласкаво просимо на наш сайт!</h1>
+          <h1>Запрошуємо до цікавого вивчення математики</h1>
           <p>На нашому сайті ви зможете дізнатися багато цікавого. Тут ви знайдете різноманітні тести та завдання для покращення своїх знань.</p>
         </header>
         <section className="scoreboard-section">

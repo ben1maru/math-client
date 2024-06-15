@@ -50,7 +50,7 @@ function AddQuiz() {
     })
     .then(response => {
       if (response.ok) {
-        setMessage('Question added successfully!');
+        setMessage('Нове питання додано!');
         setIsError(false);
         // Очистити поля форми після успішного додавання
         setQuestion('');
@@ -61,7 +61,7 @@ function AddQuiz() {
         setSelectedLevel('');
         setSelectedTheme('');
       } else {
-        setMessage('Failed to add question');
+        setMessage('Помилка при додаванні');
         setIsError(true);
       }
     })

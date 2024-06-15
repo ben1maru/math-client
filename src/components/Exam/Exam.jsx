@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Modal from "./modal/Modal";
 import "./style.css";
 import { useParams, useNavigate } from "react-router-dom";
-import NavBar from "../NavBar/NavBar"
+import NavBar from "../NavBar/NavBar";
+
 function Exam() {
   const { id_level, id_themes } = useParams();
   const [questions, setQuestions] = useState([]);
@@ -12,6 +13,7 @@ function Exam() {
   const [score, setScore] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,28 +24,46 @@ function Exam() {
       return;
     }
 
-    fetch(
-      `https://math-server-8noz.onrender.com/api/auth/user`,
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      }
-    )
-    .then((response) => response.json())
-    .then((data) => {
-      const userId = data.id;
-      setUserId(userId);
+    // Fetch user ID
+    fetch(`https://math-server-8noz.onrender.com/api/auth/user`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .catch((error) => console.error('Error fetching user data:', error));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const userId = data.id;
+        setUserId(userId);
+      })
+      .catch((error) => console.error("Error fetching user data:", error));
 
+    // Fetch questions
     fetch(
       `https://math-server-8noz.onrender.com/api/questions/questions/${id_level}/${id_themes}`
     )
-      .then((response) => response.json())
-      .then((data) => setQuestions(data));
-  }, [id_level, id_themes]);
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch questions data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Map each question to format answers correctly
+        const formattedQuestions = data.map((question) => ({
+          ...question,
+          answers: question.answer, // Rename 'answer' to 'answers'
+        }));
+        setQuestions(formattedQuestions);
+        setLoading(false); // Update loading state once questions are fetched
+      })
+      .catch((error) => console.error("Error fetching questions data:", error));
+  }, [id_level, id_themes, navigate]);
 
   const handleAnswer = () => {
     const currentQuestion = questions[currentQuestionIndex];
@@ -87,75 +107,100 @@ function Exam() {
       userId: userId,
       score: score,
       levelId: Number(id_level),
-      categoryId: Number(id_themes)
+      categoryId: Number(id_themes),
     };
 
-    fetch('https://math-server-8noz.onrender.com/api/scoreboard/scoreboardPushData', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then((response) => {
-      if (response.ok) {
-        console.log('Score data successfully pushed to the database');
-        // Додайте будь-яку логіку, яка потрібна після успішного додавання даних до бази даних
-      } else {
-        console.error('Failed to push score data to the database');
+    fetch(
+      "https://math-server-8noz.onrender.com/api/scoreboard/scoreboardPushData",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       }
-    })
-    .catch((error) => console.error('Error pushing score data to the database:', error));
+    )
+      .then((response) => {
+        if (response.ok) {
+          console.log("Score data successfully pushed to the database");
+          // Add any logic needed after successful data push
+        } else {
+          console.error("Failed to push score data to the database");
+        }
+      })
+      .catch((error) =>
+        console.error("Error pushing score data to the database:", error)
+      );
   };
 
-  return (
-    <><NavBar /><div className="app">
-      <div className="sidebar">
-        {questions.map((question, index) => (
-          <div
-            key={index}
-            className={`question ${questions[index].status || ""}`}
-            onClick={() => handleQuestionClick(index)}
-          >
-            {index + 1}
-          </div>
-        ))}
-      </div>
-      <div className="main-content">
-        {questions.length > 0 && (
-          <>
-            <div className="question-text">
-              {questions[currentQuestionIndex].question}
-            </div>
-            <div className="answers">
-              {questions[currentQuestionIndex].answers.map((answer, index) => (
-                <div key={index} className={`radio-container ${selectedAnswer === answer ? 'selected' : ''}`}>
-                  <input
-                    type="radio"
-                    id={`answer-${index}`}
-                    name="answer"
-                    value={answer}
-                    checked={selectedAnswer === answer}
-                    onChange={() => setSelectedAnswer(answer)} />
-                  <label htmlFor={`answer-${index}`}>{answer}</label>
-                </div>
-              ))}
+  // Render loading indicator if data is still loading
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
+  return (
+    <>
+      <NavBar />
+      <div className="app">
+        <div className="sidebar">
+          {questions.map((question, index) => (
+            <div
+              key={index}
+              className={`question ${questions[index].status || ""}`}
+              onClick={() => handleQuestionClick(index)}
+            >
+              {index + 1}
             </div>
-            <button className="next-button" onClick={handleAnswer}>
-              Наступне питання
-            </button>
-            {description && <div className="description">{description}</div>}
-            {showModal && (
-              <Modal score={score} onClose={() => {
-                setShowModal(false);
-                pushDataToDatabase();
-              } } />
-            )}
-          </>
-        )}
+          ))}
+        </div>
+        <div className="main-content">
+          {questions.length > 0 ? (
+            <>
+              <div className="question-text">
+                {questions[currentQuestionIndex].question}
+              </div>
+              <div className="answers">
+                {questions[currentQuestionIndex].answers.map(
+                  (answer, index) => (
+                    <div
+                      key={index}
+                      className={`radio-container ${
+                        selectedAnswer === answer ? "selected" : ""
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        id={`answer-${index}`}
+                        name="answer"
+                        value={answer}
+                        checked={selectedAnswer === answer}
+                        onChange={() => setSelectedAnswer(answer)}
+                      />
+                      <label htmlFor={`answer-${index}`}>{answer}</label>
+                    </div>
+                  )
+                )}
+              </div>
+              <button className="next-button" onClick={handleAnswer}>
+                Next Question
+              </button>
+              {description && <div className="description">{description}</div>}
+              {showModal && (
+                <Modal
+                  score={score}
+                  onClose={() => {
+                    setShowModal(false);
+                    pushDataToDatabase();
+                  }}
+                />
+              )}
+            </>
+          ) : (
+            <p>No questions found.</p>
+          )}
+        </div>
       </div>
-    </div></>
+    </>
   );
 }
 
