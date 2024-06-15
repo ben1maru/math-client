@@ -182,7 +182,8 @@ function Exam() {
                 )}
               </div>
               <button className="next-button" onClick={handleAnswer}>
-                Next Question
+                Наступне питання
+                
               </button>
               {description && <div className="description">{description}</div>}
               {showModal && (
