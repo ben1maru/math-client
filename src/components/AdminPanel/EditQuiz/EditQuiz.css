@@ -15,6 +15,15 @@
   .quiz-form form {
     margin-top: 20px;
   }
+  .success-message {
+    color: green;
+    margin-top: 10px;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
   
   .quiz-form .form-group {
     margin-bottom: 15px;

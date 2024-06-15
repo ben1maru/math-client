@@ -7,50 +7,54 @@ function EditQuiz() {
   const { id } = useParams();
   const [levels, setLevels] = useState([]);
   const [themes, setThemes] = useState([]);
-  const [questionData, setQuestionData] = useState(null);
-  const [selectedLevel, setSelectedLevel] = useState("");
-  const [selectedTheme, setSelectedTheme] = useState("");
-  const [answerOptions, setAnswerOptions] = useState([]);
-  const [correctAnswer, setCorrectAnswer] = useState("");
-  const [description, setDescription] = useState("");
+  const [questionData, setQuestionData] = useState({
+    question: '',
+    photo: '',
+    answer: ['', '', '', ''],
+    correct_answer: '',
+    description: '',
+    level_id: '',
+    category_id: ''
+  });
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     fetchQuestionData();
     fetchLevels();
     fetchThemes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchQuestionData = () => {
-    axios.get(`https://math-server-1vt9.onrender.com/api/questions/questionsEdit/${id}`)
+    axios.get(`https://math-server-8noz.onrender.com/api/questions/questionsEdit/${id}`)
       .then((response) => {
-        const data = response.data[0];
-        console.log("Fetched question data:", data);
-        setQuestionData(data);
-        setSelectedLevel(data.level_name);
-        setSelectedTheme(data.category_name);
-        setAnswerOptions(JSON.parse(data.answer)); // Розпарсене значення поля "answer"
-        setCorrectAnswer(data.correct_answer); 
-        setDescription(data.description);
+        const data = response.data;
+        setQuestionData({
+          question: data.question,
+          photo: data.photo,
+          answer: data.answer || ['', '', '', ''],
+          correct_answer: data.correct_answer,
+          description: data.description,
+          level_id: data.level_id,
+          category_id: data.category_id
+        });
       })
       .catch((error) => console.error("Error fetching question data:", error));
   };
 
   const fetchLevels = () => {
-    axios.get("https://math-server-1vt9.onrender.com/api/level/level")
+    axios.get("https://math-server-8noz.onrender.com/api/level/level")
       .then((response) => {
         const data = response.data;
-        console.log("Levels fetched:", data);
         setLevels(data);
       })
       .catch((error) => console.error("Error fetching levels:", error));
   };
 
   const fetchThemes = () => {
-    axios.get("https://math-server-1vt9.onrender.com/api/theme/theme")
+    axios.get("https://math-server-8noz.onrender.com/api/theme/theme")
       .then((response) => {
         const data = response.data;
-        console.log("Themes fetched:", data);
         setThemes(data);
       })
       .catch((error) => console.error("Error fetching themes:", error));
@@ -64,64 +68,30 @@ function EditQuiz() {
     }));
   };
 
-  const handleLevelChange = (event) => {
-    setSelectedLevel(event.target.vahyt6lue);
-    setQuestionData((prevData) => ({
-      ...prevData,
-      level_id: event.target.value,
-    }));
-  };
-
-  const handleThemeChange = (event) => {
-    setSelectedTheme(event.target.value);
-    setQuestionData((prevData) => ({
-      ...prevData,
-      category_id: event.target.value,
-    }));
-  };
-
   const handleAnswerChange = (index, value) => {
-    const updatedAnswers = [...answerOptions];
-    updatedAnswers[index] = value.toString(); // Привести значення до рядкового формату
-    setAnswerOptions(updatedAnswers);
-  
-    // Перетворити масив чисел у масив рядків і потім у JSON-рядок
-    const jsonString = JSON.stringify(updatedAnswers.map(String));
-    
-    // Очистити рядок від бекслешів
-    const cleanedJsonString = jsonString.replace(/\\/g, '');
-    
+    const updatedAnswers = [...questionData.answer];
+    updatedAnswers[index] = value;
     setQuestionData((prevData) => ({
       ...prevData,
-      answer: cleanedJsonString,
+      answer: updatedAnswers,
     }));
   };
-  
+
   const handleSubmit = (event) => {
     event.preventDefault();
-  
-    // Оновити стан питання з поточним значенням масиву відповідей
-    setQuestionData(prevData => ({
-      ...prevData,
-      answer: answerOptions.map(value => value.toString()),
-    }));
-  
-    // Відправити дані на сервер
-    axios.post(`https://math-server-1vt9.onrender.com/api/questions/questionsUpdate/${id}`, questionData)
+
+    axios.post(`https://math-server-8noz.onrender.com/api/questions/questionsUpdate/${id}`, questionData)
       .then((response) => {
-        const data = response.data;
-        console.log(questionData);
-        console.log(data);
-        console.log("Question updated successfully:", data);
-        // Додайте логіку обробки успішного оновлення, наприклад, перенаправлення на іншу сторінку
+        setMessage("Question updated successfully!");
+        setIsError(false);
       })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {
+        setMessage("Error updating question.");
+        setIsError(true);
+      });
   };
-  
-  
 
-
-  if (!questionData || !levels || !themes || levels.length === 0 || themes.length === 0) {
+  if (!questionData || levels.length === 0 || themes.length === 0) {
     return <div>Loading...</div>;
   }
 
@@ -151,7 +121,7 @@ function EditQuiz() {
             required
           />
         </div>
-        {answerOptions.map((answer, index) => (
+        {questionData.answer.map((answer, index) => (
           <div key={index} className="form-group">
             <label htmlFor={`answer_${index + 1}`}>Відповідь {index + 1}:</label>
             <input
@@ -170,7 +140,7 @@ function EditQuiz() {
             type="text"
             id="correct_answer"
             name="correct_answer"
-            value={correctAnswer}
+            value={questionData.correct_answer}
             onChange={handleInputChange}
             required
           />
@@ -180,14 +150,18 @@ function EditQuiz() {
           <input
             type="text"
             name="description"
-            value={description}
+            value={questionData.description}
             onChange={handleInputChange}
             required
           />
         </div>
         <div className="form-group">
           <label>Рівень:</label>
-          <select value={selectedLevel} onChange={handleLevelChange}>
+          <select
+            value={questionData.level_id}
+            name="level_id"
+            onChange={handleInputChange}
+          >
             {levels.map((level) => (
               <option key={level.id} value={level.id}>
                 {level.name}
@@ -197,7 +171,11 @@ function EditQuiz() {
         </div>
         <div className="form-group">
           <label>Тема:</label>
-          <select value={selectedTheme} onChange={handleThemeChange}>
+          <select
+            value={questionData.category_id}
+            name="category_id"
+            onChange={handleInputChange}
+          >
             {themes.map((theme) => (
               <option key={theme.id} value={theme.id}>
                 {theme.name}
@@ -207,6 +185,11 @@ function EditQuiz() {
         </div>
         <button type="submit">Оновити</button>
       </form>
+      {message && (
+        <div className={isError ? "error-message" : "success-message"}>
+          {message}
+        </div>
+      )}
     </div>
   );
 }

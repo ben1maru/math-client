@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import "./style.css";
 
 function Dashboard() {
   const [questions, setQuestions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
 
+  const itemsPerPage = 10;
+
   useEffect(() => {
-    fetch("https://math-server-1vt9.onrender.com/api/questions/questionsAdmin")
+    fetch("https://math-server-8noz.onrender.com/api/questions/questionsAdmin")
       .then((response) => response.json())
       .then((data) => setQuestions(data))
       .catch((error) => console.error("Error fetching questions:", error));
@@ -22,7 +26,7 @@ function Dashboard() {
   const handleDelete = (id) => {
     console.log(`Delete question with ID: ${id}`);
 
-    fetch(`https://math-server-1vt9.onrender.com/api/questions/questionsDelete/${id}`, {
+    fetch(`https://math-server-8noz.onrender.com/api/questions/questionsDelete/${id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -33,6 +37,8 @@ function Dashboard() {
       })
       .then((data) => {
         console.log("Question deleted successfully:", data);
+        setMessage('Question deleted successfully');
+        setIsError(false);
         // Оновити список питань, щоб відобразити зміни
         setQuestions((prevQuestions) =>
           prevQuestions.filter((question) => question.id !== id)
@@ -40,11 +46,23 @@ function Dashboard() {
       })
       .catch((error) => {
         console.error("Error deleting question:", error);
+        setMessage('Failed to delete question');
+        setIsError(true);
       });
   };
 
   const handleAddQuestion = () => {
     navigate('/addQuiz'); // Перенаправлення на сторінку додавання нового питання
+  };
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = questions.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(questions.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -55,6 +73,11 @@ function Dashboard() {
           Додати питання
         </button>
       </div>
+      {message && (
+        <div className={isError ? "error-message" : "success-message"}>
+          {message}
+        </div>
+      )}
       <table>
         <thead>
           <tr>
@@ -69,7 +92,7 @@ function Dashboard() {
           </tr>
         </thead>
         <tbody>
-          {questions.map((question) => (
+          {currentItems.map((question) => (
             <tr key={question.id}>
               <td>
                 <img src={question.photo} alt="question" width="70" height="70" />
@@ -92,6 +115,17 @@ function Dashboard() {
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map((number) => (
+          <button
+            key={number}
+            className={`page-button ${currentPage === number ? "active" : ""}`}
+            onClick={() => handlePageChange(number)}
+          >
+            {number}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

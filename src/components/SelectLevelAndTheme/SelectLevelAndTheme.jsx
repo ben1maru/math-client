@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NavBar from './components/NavBar/NavBar'
 
 function SelectLevelAndTheme() {
     const [levels, setLevels] = useState([]);
@@ -13,11 +14,11 @@ function SelectLevelAndTheme() {
         if (!token) {
             window.location.href = "/login";
         } else {
-            fetch('https://math-server-1vt9.onrender.com/api/level/level')
+            fetch('https://math-server-8noz.onrender.com/api/level/level')
                 .then(response => response.json())
                 .then(data => setLevels(data));
             
-            fetch('https://math-server-1vt9.onrender.com/api/theme/theme')
+            fetch('https://math-server-8noz.onrender.com/api/theme/theme')
                 .then(response => response.json())
                 .then(data => setThemes(data));
         }
@@ -38,7 +39,7 @@ function SelectLevelAndTheme() {
     };
 
     return (
-        <div className="select-container">
+        <><NavBar /><div className="select-container">
             <div className="select-column">
                 <h2>Оберіть рівень</h2>
                 <div className="checkboxes">
@@ -48,8 +49,7 @@ function SelectLevelAndTheme() {
                                 type="checkbox"
                                 id={`level-${level.id}`}
                                 checked={selectedLevel === level.id}
-                                onChange={() => handleLevelChange(level.id)}
-                            />
+                                onChange={() => handleLevelChange(level.id)} />
                             <label htmlFor={`level-${level.id}`}>{level.name}</label>
                         </div>
                     ))}
@@ -64,15 +64,14 @@ function SelectLevelAndTheme() {
                                 type="checkbox"
                                 id={`theme-${theme.id}`}
                                 checked={selectedTheme === theme.id}
-                                onChange={() => handleThemeChange(theme.id)}
-                            />
+                                onChange={() => handleThemeChange(theme.id)} />
                             <label htmlFor={`theme-${theme.id}`}>{theme.name}</label>
                         </div>
                     ))}
                 </div>
             </div>
             <button onClick={handleSubmit} disabled={!selectedLevel || !selectedTheme}>Почати</button>
-        </div>
+        </div></>
     );
 }
 

@@ -20,7 +20,7 @@ function Login() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "https://math-server-1vt9.onrender.com/api/auth/login",
+        "https://math-server-8noz.onrender.com/api/auth/login",
         {
           email: email,
           password: password,

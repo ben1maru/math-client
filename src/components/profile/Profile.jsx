@@ -17,7 +17,7 @@ const Profile = () => {
           return;
         }
 
-        const response = await fetch('https://math-server-1vt9.onrender.com/api/auth/user', {
+        const response = await fetch('https://math-server-8noz.onrender.com/api/auth/user', {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -42,7 +42,7 @@ const Profile = () => {
 
   const fetchScoreboardData = async (userId) => {
     try {
-      const response = await fetch(`https://math-server-1vt9.onrender.com/api/scoreboard/scoreboardProfile?userId=${userId}`);
+      const response = await fetch(`https://math-server-8noz.onrender.com/api/scoreboard/scoreboardProfile?userId=${userId}`);
 
       if (!response.ok) {
         throw new Error('Failed to fetch scoreboard data');

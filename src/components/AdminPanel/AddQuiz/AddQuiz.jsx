@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AddQuiz.css'
+
 function AddQuiz() {
   const [levels, setLevels] = useState([]);
   const [themes, setThemes] = useState([]);
@@ -10,16 +11,18 @@ function AddQuiz() {
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [description, setDescription] = useState('');
   const [photoLink, setPhotoLink] = useState('');
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     // Отримання списку рівнів
-    fetch('https://math-server-1vt9.onrender.com/api/level/level')
+    fetch('https://math-server-8noz.onrender.com/api/level/level')
       .then(response => response.json())
       .then(data => setLevels(data))
       .catch(error => console.error('Error fetching levels:', error));
 
     // Отримання списку тем
-    fetch('https://math-server-1vt9.onrender.com/api/theme/theme')
+    fetch('https://math-server-8noz.onrender.com/api/theme/theme')
       .then(response => response.json())
       .then(data => setThemes(data))
       .catch(error => console.error('Error fetching themes:', error));
@@ -35,11 +38,10 @@ function AddQuiz() {
       id_themes: selectedTheme,
       description,
       photo: photoLink
-
     };
 
     // Відправлення даних на сервер
-    fetch('https://math-server-1vt9.onrender.com/api/questions/questionsPush', {
+    fetch('https://math-server-8noz.onrender.com/api/questions/questionsPush', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -48,15 +50,26 @@ function AddQuiz() {
     })
     .then(response => {
       if (response.ok) {
-        console.log('Question added successfully');
-        // Перенаправлення на іншу сторінку після успішного додавання питання
-        console.log(data);
+        setMessage('Question added successfully!');
+        setIsError(false);
+        // Очистити поля форми після успішного додавання
+        setQuestion('');
+        setAnswerOptions(['', '', '', '']);
+        setCorrectAnswer('');
+        setDescription('');
+        setPhotoLink('');
+        setSelectedLevel('');
+        setSelectedTheme('');
       } else {
-        console.error('Failed to add question');
-        console.log(data);
+        setMessage('Failed to add question');
+        setIsError(true);
       }
     })
-    .catch(error => console.error('Error adding question:', error));
+    .catch(error => {
+      setMessage('Error adding question');
+      setIsError(true);
+      console.error('Error adding question:', error);
+    });
   };
 
   return (
@@ -118,6 +131,12 @@ function AddQuiz() {
         {/* Кнопка для додавання питання */}
         <button onClick={handleAddQuestion}>Додати</button>
       </div>
+      {/* Повідомлення про успіх або помилку */}
+      {message && (
+        <div className={isError ? "error-message" : "success-message"}>
+          {message}
+        </div>
+      )}
     </div>
   );
 }
