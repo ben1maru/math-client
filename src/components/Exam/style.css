@@ -74,10 +74,12 @@ button {
 }
 
 .radio-container label {
-    display: block;
-    padding: 20px 90px;
+    color: #fff;
     cursor: pointer;
-    color: white; /* Колір тексту білий */
+    display: flex;
+    align-items: center;
+    padding: 20px 30px;
+    justify-content: center;
 }
 
 /* Кольори для радіо-кнопок */
@@ -96,7 +98,11 @@ button {
 .radio-container:nth-child(4) label {
     background-color: green;
 }
-
+.question-photo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /* Стилі для вибраної радіо-кнопки */
 .radio-container.selected label {
     transform: scale(1.1); /* Збільшуємо розмір обраної кнопки */
@@ -120,4 +126,10 @@ button {
 
 .next-button:hover {
     background-color: #005f80;
+}
+@media (max-width:768px){
+    .answers{
+        display: flex;
+        flex-direction: column;
+    }
 }
