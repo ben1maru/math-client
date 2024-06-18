@@ -156,6 +156,14 @@ function Exam() {
         <div className="main-content">
           {questions.length > 0 ? (
             <>
+            {questions[currentQuestionIndex].photo && (
+                <div className="question-photo">
+                  <img
+                    src={questions[currentQuestionIndex].photo}
+                    alt=""
+                  />
+                </div>
+              )}
               <div className="question-text">
                 {questions[currentQuestionIndex].question}
               </div>
